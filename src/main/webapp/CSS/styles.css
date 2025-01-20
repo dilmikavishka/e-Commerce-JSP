@@ -1,0 +1,95 @@
+body {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f2;
+    transition: all 0.3s ease-in-out;
+}
+.sidebar {
+    width: 70px;
+    background: linear-gradient(180deg, #ff99aa, #ffb3cc);
+    padding: 20px 10px;
+    color: #fff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 0 10px 10px 0;
+}
+
+.sidebar.expanded {
+    width: 300px;
+    padding: 20px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.sidebar a .icon {
+    margin-right: 10px;
+    font-size: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar a:hover {
+    background-color: #ff8899;
+    transform: scale(1.05);
+}
+
+.sidebar a:hover .icon {
+    transform: rotate(10deg);
+}
+
+.sidebar a .text {
+    display: none;
+    margin-left: 10px;
+}
+
+.sidebar.expanded a .text {
+    display: inline;
+}
+
+.toggle-btn {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.material-icons {
+    transition: transform 0.3s ease-in-out;
+}
+
+/*.sidebar.expanded .material-icons {*/
+/*    transform: rotate(180deg);*/
+/*}*/
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
