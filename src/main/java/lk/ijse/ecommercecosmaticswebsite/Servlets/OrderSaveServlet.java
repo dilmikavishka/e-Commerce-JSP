@@ -18,15 +18,12 @@ import java.util.List;
 
 @WebServlet(name = "OrderSaveServlet", value = "/getOrders")
 public class OrderSaveServlet extends HttpServlet {
-
     CartItemBo cartItemBo = (CartItemBo) BoFactory.getBoFactory().getBO(BoFactory.BoType.CartItem);
-
     @Override
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
         cartItemBo = new CartItemBoImpl((DataSource) servletContext.getAttribute("dataSource"));
     }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userId = req.getParameter("userId");
@@ -58,4 +55,12 @@ public class OrderSaveServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User role is missing.");
         }
     }
+
+
+
+
+
+
+
+
 }

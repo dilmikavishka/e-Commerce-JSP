@@ -7,24 +7,30 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lk.ijse.ecommercecosmaticswebsite.bo.Bo.ProductBo;
 import lk.ijse.ecommercecosmaticswebsite.bo.Bo.UserBo;
 import lk.ijse.ecommercecosmaticswebsite.bo.BoFactory;
+import lk.ijse.ecommercecosmaticswebsite.bo.BoImp.ProductBoImpl;
 import lk.ijse.ecommercecosmaticswebsite.bo.BoImp.UserBoImpl;
+import lk.ijse.ecommercecosmaticswebsite.dto.ProductDTO;
 import lk.ijse.ecommercecosmaticswebsite.dto.UserDTO;
 
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
     UserBo userbo = (UserBo) BoFactory.getBoFactory().getBO(BoFactory.BoType.User);
+    ProductBo productBo = (ProductBo) BoFactory.getBoFactory().getBO(BoFactory.BoType.Product);
 
     @Override
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
         userbo = new UserBoImpl((DataSource) servletContext.getAttribute("dataSource"));
+        productBo = new ProductBoImpl((DataSource) servletContext.getAttribute("dataSource"));
     }
 
     @Override
@@ -37,6 +43,8 @@ public class LoginServlet extends HttpServlet {
 
             if (user != null) {
                 HttpSession session = req.getSession();
+                List<ProductDTO> allProducts = productBo.getAllProducts();
+                session.setAttribute("allProducts", allProducts);
                 session.setAttribute("loggedInUser", user);
                 session.setAttribute("userId", user.getUserId());
                 session.setAttribute("username", user.getUsername());

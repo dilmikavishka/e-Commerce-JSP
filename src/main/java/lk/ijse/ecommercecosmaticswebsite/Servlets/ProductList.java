@@ -6,9 +6,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.ecommercecosmaticswebsite.bo.Bo.CategoryBo;
 import lk.ijse.ecommercecosmaticswebsite.bo.Bo.ProductBo;
 import lk.ijse.ecommercecosmaticswebsite.bo.BoFactory;
+import lk.ijse.ecommercecosmaticswebsite.bo.BoImp.CategoryBoImpl;
 import lk.ijse.ecommercecosmaticswebsite.bo.BoImp.ProductBoImpl;
+import lk.ijse.ecommercecosmaticswebsite.dto.CategoryDTO;
 import lk.ijse.ecommercecosmaticswebsite.dto.ProductDTO;
 
 
@@ -20,18 +23,23 @@ import java.util.List;
 public class ProductList extends HttpServlet {
 
     ProductBo productBo = (ProductBo) BoFactory.getBoFactory().getBO(BoFactory.BoType.Product);
+    CategoryBo categoryBo = (CategoryBo) BoFactory.getBoFactory().getBO(BoFactory.BoType.Category);
 
     @Override
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
         productBo = new ProductBoImpl((DataSource) servletContext.getAttribute("dataSource"));
+        categoryBo = new CategoryBoImpl((DataSource) servletContext.getAttribute("dataSource"));
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             List<ProductDTO> allProducts = productBo.getAllProducts();
+            List<CategoryDTO>categoryDTOS = categoryBo.getAllCategories();
             req.setAttribute("products", allProducts);
+            req.setAttribute("categories", categoryDTOS);
             req.getRequestDispatcher("product.jsp").forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();

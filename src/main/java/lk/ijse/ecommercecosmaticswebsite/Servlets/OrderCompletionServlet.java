@@ -65,14 +65,6 @@ public class OrderCompletionServlet extends HttpServlet {
         String status = "Pending";
         String products = req.getParameter("products");
 
-        System.out.println("Order Saved: ");
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Cart ID: " + cartId);
-        System.out.println("User ID: " + userId);
-        System.out.println("Total Price: " + totalPrice);
-        System.out.println("Status: " + status);
-        System.out.println("Products: " + products);
-
         String[] productItems = products.split(";");
         List<OrderDetailDTO> orderDetails = new ArrayList<>();
 
@@ -91,8 +83,6 @@ public class OrderCompletionServlet extends HttpServlet {
 
             orderDetails.add(orderDetail);
         }
-
-
         OrderDTO order = new OrderDTO();
         order.setOrderId(orderId);
         order.setUserId(userId);

@@ -1,17 +1,16 @@
 <%@ page import="java.util.List" %>
 <%@ page import="lk.ijse.ecommercecosmaticswebsite.dto.ProductDTO" %>
+<%@ page import="lk.ijse.ecommercecosmaticswebsite.dto.CategoryDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Product Cards</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            background-image: url("111.jpg");
-            /*background-color: #f4f6f9;*/
+            background-color: #f4f6f9;
             font-family: 'Arial', sans-serif;
         }
 
@@ -107,11 +106,103 @@
         .cart-modal ul li {
             padding: 5px 0;
         }
+
+        .filter-container select.form-select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            background-color: #ffffff;
+            font-size: 16px;
+            color: #495057;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .price-filter label {
+            font-size: 16px;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        #searchBar {
+            width: 550px;
+            max-width: 600px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #searchBar:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 16px;
+            color: #495057;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-select:hover,
+        .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+
+
     </style>
 </head>
 <body>
 <jsp:include page="sidebar.jsp" />
 <div class="content container mt-5">
+    <div class="filter-container">
+        <div>
+
+            <select id="categoryFilter" class="form-select">--%>
+                <option value="all">All Categories</option>
+                <%
+                    List<CategoryDTO> categoryList = (List<CategoryDTO>) request.getAttribute("categories");
+                    if (categoryList != null) {
+                        for (CategoryDTO category : categoryList) {
+                %>
+                <option value="<%= category.getId() %>"><%= category.getName() %></option>
+                <%
+                        }
+                    }
+                %>
+            </select>
+        </div>
+        <div>
+            <input type="text" id="searchBar" class="form-control" placeholder="Search products...">
+        </div>
+    </div>
+
+
     <div class="row justify-content-center" id="productContainer">
         <script>
             const user = JSON.parse(localStorage.getItem('user'));
@@ -281,14 +372,28 @@
     <h5>Shopping Cart</h5>
     <ul id="cartItems"></ul>
     <div><strong>Total: </strong><span id="totalPrice">0</span></div>
-        <form id="cartSaveForm" action="cart-save" method="POST">
-<%--    <form id="cartSaveForm">--%>
+    <form id="cartSaveForm" action="cart-save" method="POST">
+        <%--    <form id="cartSaveForm">--%>
         <input type="hidden" name="cartData" id="cartData">
         <button type="button" class="btn btn-primary mt-3" onclick="alertCartDataAndSave()">Save Cart</button>
     </form>
 </div>
 
 <script>
+    document.getElementById("categoryFilter").addEventListener("change", function () {
+        const selectedCategory = this.value;
+        const products = document.querySelectorAll(".product-card");
+
+        products.forEach(product => {
+            const productCategory = product.getAttribute("data-category");
+            if (selectedCategory === "all" || productCategory === selectedCategory) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    });
+
     let cart = [];
 
     const user_id = user.id;
@@ -326,28 +431,52 @@
         document.getElementById("cartSaveForm").submit();
     }
 
+    document.getElementById("categoryFilter").addEventListener("change", function () {
+        const selectedCategory = this.value;
+        const products = document.querySelectorAll(".product-card");
 
-    <%--const products = [];--%>
+        products.forEach(product => {
+            const productCategory = product.getAttribute("data-category");
+            const productPrice = parseFloat(product.querySelector('.product-price').textContent.replace('LKR ', '').trim());
+            const priceRange = document.getElementById('priceRange').value;
 
-    <%--<% if (productDTOList != null) { %>--%>
-    <%--<% for (ProductDTO product : productDTOList) { %>--%>
-    <%--products.push({--%>
-    <%--    p_id: "<%= product.getProduct_id() %>",--%>
-    <%--    p_name: "<%= product.getProduct_name() %>",--%>
-    <%--    p_description: "<%= product.getDescription() %>",--%>
-    <%--    p_category: "<%= product.getCategory_id() %>",--%>
-    <%--    price: "<%= product.getPrice() %>",--%>
-    <%--    p_image: "<%= product.getBase64Image() %>"--%>
-    <%--});--%>
-    <%--<% } %>--%>
-    <%--<% } %>--%>
+            if ((selectedCategory === "all" || productCategory === selectedCategory) && productPrice <= priceRange) {
+                product.style.display = "";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    });
 
-    <%--// Store in localStorage--%>
-    <%--localStorage.setItem("products", JSON.stringify(products));--%>
-    <%--console.log("Products stored in localStorage:", products);--%>
+
+
+
+    document.getElementById("searchBar").addEventListener("input", function() {
+        const query = this.value.toLowerCase();
+        const products = document.querySelectorAll(".product-card");
+
+        products.forEach(product => {
+            const productName = product.querySelector(".card-title").textContent.toLowerCase();
+            if (productName.includes(query)) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    });
+
+    const searchBar = document.getElementById("searchBar");
+    searchBar.addEventListener("focus", () => {
+        searchBar.style.transition = "transform 0.3s";
+        searchBar.style.transform = "scale(1.05)";
+    });
+
+    searchBar.addEventListener("blur", () => {
+        searchBar.style.transform = "scale(1)";
+    });
+
 </script>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -66,17 +66,17 @@
 
     <a href="user-save.jsp" id="add-customer" style="display: none;">
         <span class="material-icons" style="color: #CF1936">person_add</span>
-        <span class="text">Add Customer</span>
+        <span class="text">Add User</span>
     </a>
 
     <a href="user-table" id="view-customer" style="display: none;">
         <span class="material-icons" style="color: #CF1936">group</span>
-        <span class="text">View Customers</span>
+        <span class="text">View Users</span>
     </a>
 
     <a href="user-actions.jsp" id="action-customer" style="display: none;">
         <span class="material-icons" style="color: #CF1936">build_circle</span>
-        <span class="text">Manage Customers</span>
+        <span class="text">Manage Users</span>
     </a>
 
     <a href="getOrdersoftheSystem" id="order-management" style="display: none;">
@@ -102,7 +102,7 @@
     <!-- Common sections for all users -->
     <a href="product-list" id="product" style="display: none;">
         <span class="material-icons" style="color: #CF1936">shopping_bag</span>
-        <span class="text">Products</span>
+        <span class="text">Shop Now</span>
     </a>
 
     <a href="getOrders" id="order" style="display: none;">
